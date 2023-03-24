@@ -11,6 +11,7 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
@@ -33,36 +34,63 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final ConterController controller = Get.put(ConterController());
   @override
   Widget build(BuildContext context) {
-    Get.put(ConterController());
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
       ),
       body: Center(
-        child: GetBuilder<ConterController>(builder: (mycounter) {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              const Text(
-                'You have pushed the button this many times:',
-              ),
-              Text(
-                mycounter.counter.toString(),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const Text(
+              'You have pushed the button this many times:',
+            ),
+            Obx(
+              () => Text(
+                controller.counter.toString(),
                 style: Theme.of(context).textTheme.headlineMedium,
               ),
-            ],
-          );
-        }),
+            ),
+          ],
+        ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Get.find<ConterController>().updateCounter();
-          print(Get.find<ConterController>().counter);
-        },
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            onPressed: () {
+              controller.updateCounter();
+              print(controller.counter);
+            },
+            tooltip: 'Increment',
+            child: const Icon(Icons.add),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          FloatingActionButton(
+            onPressed: () {
+              controller.decrementCounter();
+              print(controller.counter);
+            },
+            tooltip: 'Derement ',
+            child: const Icon(Icons.remove),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          FloatingActionButton(
+            onPressed: () {
+              controller.clearCounter();
+              print(controller.counter);
+            },
+            tooltip: 'Clear',
+            child: const Icon(Icons.clear_all),
+          ),
+        ],
       ),
     );
   }
